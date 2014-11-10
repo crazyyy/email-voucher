@@ -1,0 +1,220 @@
+<?php /**
+ * [Short Description]
+ *
+ * [Long Description]
+ *
+ * [Custom developers description]
+ * @package Hotels24
+ * @subpackage
+ * @version 0.0.1
+ * @author  lazycommit <vladimir.mirza@gmail.co?>
+ *          Date: 8/20/12
+ *          Time: 9:44 AM
+ *
+ */
+
+//alias section
+if (!function_exists('cib_cf')) {
+    function cib_cf($num, $format = '##0,00')
+    {
+        $reps = 0;
+        $format = str_replace(',', '-', $format, $reps);
+        $res = \Zend_Locale_Format::toNumber($num, array('number_format' => $format));
+        if ($reps > 0) {
+            return str_replace('-', ',', $res);
+        }
+        return $res;
+    }
+}
+$data = & $this->data;
+
+/** @var \Documents\Hotels\HotelsAgreement $agreement */
+$agreement = $data['legal_entity'];
+
+if (!$data) {
+    echo 'Bad voucher data :(';
+    return false;
+}
+
+$countPlace = 0;
+if (count($data['rooms']) == 1) {
+    $countPlace = array_values($data['rooms'])[0]['count'];
+}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Акт заселения в <?= $data['hotel']['hotel_name'] ?></title>
+
+    
+
+<style type="text/css">
+body {
+width: 100% !important; margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+.ExternalClass {
+width: 100%;
+}
+.ExternalClass {
+line-height: 100%;
+}
+#backgroundTable {
+width: 100% !important; margin: 0; padding: 0; line-height: 100% !important;
+}
+img {
+outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;
+}
+</style>
+</head>
+<body style="width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0; padding: 0;">
+    <table cellpadding="0" cellspacing="0" border="0" id="backgroundTable" style="width: 100% !important; line-height: 100% !important; border-spacing: 0; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse; margin: 0; padding: 0;">
+        <tr>
+            <td style="border-collapse: collapse;">
+                <table cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse; width: 680px; margin: 0 auto; padding: 30px 20px 0;">
+                    <tr class="line-1" style="padding: 0 0 20px;">
+                        <td class="block-1" style="border-collapse: collapse; width: 50%; text-align: left; padding: 10px 0;" align="left">
+                            <img src="http://crazyyy.pp.ua/img/mail_logo.png" alt="" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;" />
+                        </td>
+                        <td class="block-2" style="border-collapse: collapse; width: 50%; text-align: right; padding: 10px 0;" align="right">
+                            <h1 style="font-size: 160%;">Акт заселения <span style="font-weight: bold;">(ваучер)</span></h1>
+                            <?php if ( $data['type'] === \Managers\Deed\DeedType::DEED_ONLINE_ARRIVAL_WITHOUT_FINANCIAL_GUARANTEES_TYPE ) {?>
+                                    <h5>№ <?= $data['callId'] ?></h5>
+                                <?php } ?>
+                        </td>
+                    </tr><!-- line-1 -->
+                    <tr class="line-2" style="font-size: 14px;">
+                        <td class="block-1" style="border-collapse: collapse; width: 50%; text-align: left; padding: 10px 0;" align="left">
+                            Номер заказа <span style="font-weight: bold;"><?= $data['callId'] ?></span><br />
+                            Дата заказа <span style="font-weight: bold;"><?= $data['orderDate'] ?></span>
+                        </td>
+                        <td class="block-2" style="border-collapse: collapse; width: 50%; text-align: right; vertical-align: top; padding: 10px 0;" align="right" valign="top">
+                            Имя гостя: <span style="font-weight: bold;"><?= $data['client']['fio'] ?></span>
+                        </td>
+                    </tr><!-- line-2 -->
+                    <tr class="line-3">
+                        <td colspan="2" style="border-collapse: collapse; width: 50%; text-align: center; font-weight: bold; line-height: 2; font-size: 80%; padding: 10px 0;" align="center">
+                            Уважаемый(ая), <?= $data['client']['first_name'] ?>!<br />Это ваучер для Вашего заселения в отель. Пожалуйста, распечатайте и покажите его в отеле.
+                        </td>
+                    </tr><!-- line-3 -->
+                    <tr class="line-4">
+                        <td class="block-1" style="border-collapse: collapse; width: 50%; text-align: left; vertical-align: top; padding: 10px 0;" align="left" valign="top">
+                            <ul style="display: block; font-size: 0; height: 300px; margin: 0 5px; padding: 5px; border: 1px solid #000;">
+                                <li class="list-1" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Сведения о бронировании</li>
+                                <li class="list-2" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: normal; min-height: 16px; text-align: right; border-bottom-width: 1px; border-bottom-style: solid; padding: 1px 0;">ночей:<?= $data['date_interval'] ?>, <?php if (!isset($data['bookinRoomType'])) { echo('номеров: ' . $data['countTypesOfRoom']['1'] . ', мест: ' . $data['countTypesOfRoom']['2']); } else { echo (($data['bookinRoomType'] == 2) ? 'мест: ' : 'номеров: ') . $data[' rooms_count']; }?>, <?php if($data['guest_count']?> 0) { ?>, гостей: <?= $data['guest_count'] ?><?php } ?></li>
+                                <li class="list-3" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Регистрация заезда</li>
+                                <li class="list-4" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"><?= $data['begin_date'] ?><?php if (isset($data['arrivalTime'] )) { echo(' - ' . $data['arrivalTime']) ; } else { ?> после <?= $data['hotel']['checkin_from'] ?> <?php } ?></li>
+                                <li class="list-5" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Регистрация выезда</li>
+                                <li class="list-6" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"><?= $data['hotel']['checkout_to'] ?></li>
+                                <li class="list-7" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Общая стоимость <?php if (isset($data['bookinRoomType'])) { if ((count($data['rooms'])?> 1) || $countPlace > 1) { echo(($data['bookinRoomType'] == 2) ? 'мест' : 'номеров'); } else { echo(($data['bookinRoomType'] == 2) ? 'места' : 'номера'); } } ?></li>
+                                <li class="list-8" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"><?= cib_cf($data['totalShtraf']) ?></li>
+                                        <?php $prepay = ( $data['bookingType'] == \Hotels24\Common\Booking\BookingType::NO_GUARANTEES || $data['type'] === \Managers\Deed\DeedType::DEED_ONLINE_ARRIVAL_WITHOUT_FINANCIAL_GUARANTEES_TYPE || $data['type'] === \Managers\Deed\DeedType::DEED_ONLINE_ARRIVAL_CARD_PREPAYMENT_TYPE ); ?>
+                                <li class="list-9" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Предоплата на Hotels24 (<?= $agreement->getShortName(); ?>)</li>
+                                <li class="list-10" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"><?= cib_cf( $prepay ? 0 : $data['customShtraf'] ) ?> грн.</li>
+                                <li class="list-11" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">К оплате в отеле</li>
+                                <li class="list-12" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"><?= cib_cf($sum) ?> грн</li>
+                                <!-- !WARNING! TAXRATE! -->
+                                <?php if (isset($data['hotel']['service']['НДС, муниципальный налог/налог на туристов']) && $data['hotel']['service']['НДС, муниципальный налог/налог на туристов']) { ?>
+                                <li class="list-12-a1" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"><?= $data['hotel']['service']['НДС, муниципальный налог/налог на туристов'] ?></li>
+                                <li class="list-12-a2" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"></li>
+                                <?php } ?>
+                                <!-- // !WARNING! TAXRATE! -->
+                                <?php if (
+                                    isset($data['otmena_do'])
+                                    && $data['otmena_do']
+                                    && $data['hotel']['cancel_booking_day'] != 1001
+                                    && $data['hotel']['cancel_booking_day'] != null
+                                    && $data['customShtraf']?> 0
+                                    && $data['bookingType'] != \Hotels24\Common\Booking\BookingType::NO_GUARANTEES) { ?>
+
+                                <li class="list-13" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Бесплатная отмена бронирования.</li>
+                                <li class="list-14" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">до <?= $data['otmena_do'] ?></li>
+                                <li class="list-15" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Стоимость отмены бронирования</li>
+                                <li class="list-16" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">с <?= $data['otmena_do'] ?> &ndash; <?= $data['customShtraf'] ?> грн.
+                                    <h6>В случае отмены бронирования в срок, мы вернем Вам предоплату в течение 14 дней за вычетом банковской комиссии.</h6>
+                                </li>
+                                <?php } elseif ($data['customShtraf']?> 0 && $data['bookingType'] != \Hotels24\Common\Booking\BookingType::NO_GUARANTEES) { ?>
+                                <li class="list-13" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Бесплатная отмена бронирования невозможна.</li>
+                                <li class="list-14" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"> </li>
+                                <li class="list-15" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Стоимость отмены бронирования</li>
+                                <li class="list-16" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"><?= cib_cf($data['customShtraf']) ?> грн.</li>
+                                <?php } else { ?>
+                                <li class="list-13" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Бесплатная отмена бронирования.</li>
+                                <li class="list-14" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">В случае отмены, просьба сообщить по телефонам <?php if ($agreement?>getId() == 300) { ?>067 510 15 04, 0800 210-017, 044 364-20-00 <?php } else { ?> 067 430 78 04, 067-433-19-28, 044 364-79-79<?php } ?></li>
+                                <li class="list-15" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"> </li>
+                                <li class="list-16" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"> </li>
+                                <?php } ?>
+                            </ul>
+                        </td>
+                        <td class="block-2" style="border-collapse: collapse; width: 50%; text-align: right; vertical-align: top; padding: 10px 0;" align="right" valign="top">
+                            <ul style="display: block; font-size: 0; height: 300px; margin: 0 5px; padding: 5px; border: 1px solid #000;">
+                                <li class="list-1" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Гостиница</li>
+                                <li class="list-2" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: normal; min-height: 16px; text-align: right; border-bottom-width: 1px; border-bottom-style: solid; padding: 1px 0;"><?= $data['hotel']['hotel_name'] ?></li>
+                                <li class="list-3" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Адрес</li>
+                                <li class="list-4" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">г. <?= $data['city']['city_name'] ?>  <?= $data['hotel']['hotel_address'] ?></li>
+                                <li class="list-5" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Телефон</li>
+                                <li class="list-6" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"><?php //todo: профиксить phone_booking и поменять местами телефоны
+                                if (isset($data['hotel']['phone_booking']) && !empty($data['hotel']['phone_booking']) ) { echo $data['hotel']['phone_booking']; } 
+                                elseif (isset($data['hotel']['telephone_round_the_clock']) && !empty($data['hotel']['telephone_round_the_clock']) ) { echo $data['hotel']['telephone_round_the_clock']; } 
+                                else { 
+                                //todo
+                                    } ?></li>
+                                <?php if (isset($data['hotel']['email_booking']) && $data['hotel']['email_booking']) { ?>
+                                <li class="list-7" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">E-mail</li>
+                                <li class="list-8" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"><a href="mailto:<?= $data['hotel']['email_booking'] ?>"><?= $data['hotel']['email_booking'] ?></a></li>
+                                <?php } ?>
+                                <?php if (!empty($data['description_way_to_hotel'])) { ?>
+                                <li class="list-9" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">Местонахождение</li>
+                                <li class="list-10" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;"><?= $data['description_way_to_hotel'] ?> </div> <?php } ?></li>
+                                <?php } ?>
+                                <?php if( isset($data['hotel']['latitude']) && isset($data['hotel']['longitude']) && !empty($data['hotel']['latitude']) && !empty($data['hotel']['longitude']) && !$data['type'] ) {?>
+                                <li class="list-11" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">GPS координаты:</li>
+                                <li class="list-12" style="display: inline-block; width: 100%; font-size: 12px; vertical-align: top; font-weight: bold; min-height: 16px; text-align: left; padding: 1px 0;">N <?= $data['hotel']['latitude']; ?>  E <?= $data['hotel']['longitude']; ?></li>
+                                <?php } ?>
+                            </ul>
+                        </td>
+                    </tr><!-- line-3 -->
+                    <tr class="line-5">
+                        <td colspan="2" style="border-collapse: collapse; width: 50%; padding: 10px 0;">
+                            <h4 style="font-weight: normal; line-height: 1.8; font-size: 90%; margin: 0 0 5px;">ВАЖНЫЕ ПРИМЕЧАНИЯ: <span style="font-weight: bold;">СЧЕТ С УЧЕТОМ ЗАВТРАКА 50 ГРН</span></h4>
+                            <h5 style="font-weight: bold; line-height: 1.8; font-size: 80%; margin: 0 0 5px;">Вы гарантировали бронирование полной оплатой за проживание через Hotels24.ua.</h5>
+                            <h6 style="font-weight: normal; line-height: 1.8; text-align: center; margin: 0 0 5px;" align="center">Вам не нужно делать доплату в отеле за проживание.</h6>
+                            <h3 style="font-weight: normal; line-height: 1.8; text-align: center; text-decoration: underline; font-size: 90%; margin: 0 0 5px;" align="center">Описание номера и услуг в отеле:</h3>
+                        </td>
+                    </tr><!-- line-6 -->
+                    <tr class="line-6" style="font-size: 80%;">
+                        <td class="block-1" style="border-collapse: collapse; width: 50%; text-align: left; line-height: 1.3; border-right-width: 1px; border-right-color: #000; border-right-style: solid; border-top-width: 1px; border-top-color: #000; border-top-style: solid; padding: 0 20px;" align="left">
+                            <h5 style="font-size: 100%; font-weight: normal; text-decoration: underline; margin: 5px 0;">Люкс</h5>
+                            Двухкомнатный номер с двухспальной кроватью и диваном. В номере душ, горячая вода круглосуточно. Есть телефон с выходом в город.
+                        </td>
+                        <td class="block-2" style="border-collapse: collapse; width: 50%; text-align: left; line-height: 1.3; border-top-width: 1px; border-top-color: #000; border-top-style: solid; padding: 0 20px;" align="left">
+                            <h5 style="font-size: 100%; font-weight: normal; text-decoration: underline; margin: 5px 0;">Услуги в отеле:</h5>
+                            Бар, Интернет, Конференц-зал, Оздоровление, Автостоянка, Прачечная, Ресторан, Сад, Обслуживание номеров, Бассейн
+                        </td>
+                    </tr><!-- line-6 -->
+                    <tr class="line-7" style="font-size: 80%;">
+                        <td class="block-1" style="border-collapse: collapse; width: 50%; text-align: left; line-height: 1.3; border-right-width: 1px; border-right-color: #000; border-right-style: solid; border-bottom-width: 1px; border-bottom-color: #000; border-bottom-style: solid; padding: 0 20px;" align="left">
+                            <?= $data['hotel_photo'] ?>
+                        </td>
+                        <td class="block-2" style="border-collapse: collapse; width: 50%; text-align: left; line-height: 1.3; border-bottom-width: 1px; border-bottom-color: #000; border-bottom-style: solid; padding: 0 20px;" align="left">
+                            <h5 style="font-size: 100%; font-weight: normal; text-decoration: underline; margin: 5px 0;">Услуги в номере:</h5>
+                            душ, телевизор, телефон, кондиционер, фен, звонок "побудка" / будильник, рабочий стол, отопление, кабельное тв
+                        </td>
+                    </tr><!-- line-7 -->
+                    <tr class="line-8">
+                        <td colspan="2" style="border-collapse: collapse; width: 50%; padding: 10px 0;">
+                            <p style="font-size: 60%; margin: 0 0 5px;">Вы всегда можете изменить или отменить бронирование просто по телефону!</p>
+                            <p style="font-size: 60%; margin: 0 0 5px;">В случае необходимости, мы поможем Вам с поселением в отель.</p>
+                            <p style="font-size: 60%; margin: 0 0 5px;">Работаем круглосуточно: <a href="tel:+380675101504" style="font-weight: bold; font-size: 200%; text-decoration: none; color: #000;">067-510-15-04</a>, <a href="tel:+380443642000" style="font-weight: bold; font-size: 200%; text-decoration: none; color: #000;">044-364-20-00</a>, <a href="tel:0800210017" style="font-weight: bold; font-size: 200%; text-decoration: none; color: #000;">0-800-210-017</a></p>
+                            <p style="font-size: 60%; margin: 0 0 5px;">Руководитель отдела бронирования Татьяна Твердохлебова 096-340-73-41 , Генеральный директор Hotels24.ua Игорь Довбня 067-430-42-38 (9-18 пн-пт)</p>
+                            <h5 style="font-size: 90%; text-align: center; margin: 0 0 5px;" align="center">Желаем Вам приятного пребывания в отеле! Ваш Hotels24.ua</h5>
+                        </td>
+                    </tr><!-- line-9 -->
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
