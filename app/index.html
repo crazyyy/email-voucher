@@ -86,7 +86,7 @@ if (count($data['rooms']) == 1) {
                         <td class="block-1">
                             <ul>
                                 <li class="list-1">Сведения о бронировании</li>
-                                <li class="list-2">ночей:<?= $data['date_interval'] ?>, <?php if (!isset($data['bookinRoomType'])) { echo('номеров: ' . $data['countTypesOfRoom']['1'] . ', мест: ' . $data['countTypesOfRoom']['2']); } else { echo (($data['bookinRoomType'] == 2) ? 'мест: ' : 'номеров: ') . $data[' rooms_count']; }?>, <?php if($data['guest_count'] > 0) { ?>, гостей: <?= $data['guest_count'] ?><?php } ?></li>
+                                <li class="list-2">ночей:<?= $data['date_interval'] ?>, <?php if (!isset($data['bookinRoomType'])) { echo('номеров: ' . $data['countTypesOfRoom']['1'] . ', мест: ' . $data['countTypesOfRoom']['2']); } else { echo (($data['bookinRoomType'] == 2) ? 'мест: ' : 'номеров: ') . $data[' rooms_count']; }?>, <?php if($data['guest_count']  > 0) { ?>, гостей: <?= $data['guest_count'] ?><?php } ?></li>
                                 <li class="list-3">Регистрация заезда</li>
                                 <li class="list-4"><?= $data['begin_date'] ?><?php if (isset($data['arrivalTime'] )) { echo(' - ' . $data['arrivalTime']) ; } else { ?> после <?= $data['hotel']['checkin_from'] ?> <?php } ?></li>
                                 <li class="list-5">Регистрация выезда</li>
@@ -150,7 +150,7 @@ if (count($data['rooms']) == 1) {
                                 <?php } ?>
                                 <?php if (!empty($data['description_way_to_hotel'])) { ?>
                                 <li class="list-9">Местонахождение</li>
-                                <li class="list-10"><?= $data['description_way_to_hotel'] ?> </div> <?php } ?></li>
+                                <li class="list-10"><?= $data['description_way_to_hotel'] ?></li>
                                 <?php } ?>
                                 <?php if( isset($data['hotel']['latitude']) && isset($data['hotel']['longitude']) && !empty($data['hotel']['latitude']) && !empty($data['hotel']['longitude']) && !$data['type'] ) {?>
                                 <li class="list-11">GPS координаты:</li>
